@@ -28,13 +28,58 @@ Use the help menu to explore what the series `gold`, `woolyrnq` and `gas` repres
 ```{r, echo=TRUE, cache=TRUE, eval=FALSE}
 help(gold)
 # to do
-
 ```
+#Gold help
+gold {forecast}	R Documentation
+Daily morning gold prices
+Description
+Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
 
+Usage
+gold
+Format
+Time series data
+
+```{r}
+help(woolyrnq)
+```
+#Woolyrnq help
+woolyrnq {forecast}	R Documentation
+Quarterly production of woollen yarn in Australia
+Description
+Quarterly production of woollen yarn in Australia: tonnes. Mar 1965 – Sep 1994.
+
+Usage
+woolyrnq
+Format
+Time series data
+
+Source
+Time Series Data Library. https://pkg.yangzhuoranyang.com/tsdl/
+```{r}
+help(gas)
+```
+#Gas help
+gas {forecast}	R Documentation
+Australian monthly gas production
+Description
+Australian monthly gas production: 1956–1995.
+
+Usage
+gas
+Format
+Time series data
+
+Source
+Australian Bureau of Statistics.
+________________________________________________________
 Use `autoplot` to plot each of these in separate plots.
 
 ```{r, echo=TRUE, cache=TRUE}
 # to do
+autoplot(gold)
+autoplot(woolyrnq)
+autoplot(gas)
 
 ```
 
@@ -43,7 +88,9 @@ Hint: apply the `frequency()` function.
 
 ```{r, echo=TRUE, cache=TRUE}
 # to do
-
+frequency(gold)
+frequency(woolyrnq)
+frequency(gas)
 ```
 
 Use `which.max()` to spot the outlier in the `gold` series. 
@@ -51,8 +98,10 @@ Use `which.max()` to spot the outlier in the `gold` series.
 
 ```{r, echo=TRUE, cache=TRUE}
 # to do
-
+which.max(gold)
+gold[770]
 ```
+It was observation 770 with a value of 593.7
 
 # Exercise 2 
 
@@ -76,18 +125,19 @@ Construct time series plots of each of the three series and use 'facets = TRUE' 
 ```{r, echo=TRUE, cache=TRUE}
 # to do
 
+autoplot(mytimeseries, facets = TRUE)
 ```
 
 Check what happens when you don't include `facets=TRUE`.
 
 ```{r, echo=TRUE, cache=TRUE, dependson="exmyts"}
 # to do
-
+autoplot(mytimeseries)
 ```
 
 # Exercise 3
 
-Import some monthly Australian retail data from the foler data. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
+Import some monthly Australian retail data from the folder data. These represent retail sales in various categories for different Australian states, and are stored in a MS-Excel file.
 
 You can read the data into R with the following script:
 
@@ -100,19 +150,28 @@ The second argument (`skip=1`) is required because the Excel sheet has two heade
 Select one of the time series as follows (but replace the column name with your own chosen column):
 
 ```{r, echo=TRUE, cache=TRUE}
-myts <- ts(retaildata[, "A3349873A"], frequency = 12, start = c(1982, 4))
+myts <- ts(retaildata[, "A3349335T"], frequency = 12, start = c(1982, 4))
 ```
 
 Explore your chosen retail time series using the following functions: `autoplot`, `ggseasonplot`, `ggsubseriesplot`, `gglagplot`, `ggAcf`
 
 ```{r, echo=TRUE, cache=TRUE}
 # to do
-
+autoplot(myts)
+ggseasonplot(myts)
+ggsubseriesplot(myts)
+gglagplot(myts)
+ggAcf(myts)
 ```
 
 **Can you spot any seasonality, cyclicity and trend? What do you learn about the series?**
 
-Your answer:
+Your answer: 
+The Trend is going up over a long time. It is clearly visible in the autoplot.
+In the ggseasonplot it is visible, that every year the values go up aswell.
+The subseriesplot shows, that there is a seasonality. The Values for December are higher as the other values for every year.
+
+
 
 
 # Exercise 4
@@ -123,6 +182,12 @@ Create time plots of the following time series: goog, writing, fancy, a10, h02.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 # to do
+help(goog)
+autoplot(goog, xlab="Trading days", ylab="Stock prices", main="Daily closing stock prices of Google Inc")
+autoplot(writing)
+autoplot(fancy)
+autoplot(a10)
+autoplot(h02)
 
 ```
 
@@ -135,37 +200,59 @@ Use the `ggseasonplot` and `ggsubseriesplot` functions to explore the seasonal p
 ```{r, echo=TRUE}
 # writing
 # to do
+help(writing)
+ggseasonplot(writing)
+ggsubseriesplot(writing)
 
 ```
 
 Your answer:
+There is a seasonal pattern, that shows probably the summer holidays in school. Therefore less Paper for printing and wirting is bought.
 
 
 ```{r, echo=TRUE}
 # fancy
 # to do
+help(fancy)
+ggseasonplot(fancy)
+ggsubseriesplot(fancy)
 
 ```
 
-Your answer:#
+Your answer:
+In general there is a trend going up from year to year.
+The Seasonality is clearly visible for december. The Souvenir shops make a lot of sales, probably because a lot of people go to Australia over winter.
 
 
 ```{r, echo=TRUE}
 # a10
 # to do
+help(a10)
+ggseasonplot(a10)
+ggsubseriesplot(a10)
 
 ```
 
 Your answer:
+One can see a seasonality for January. Maybe the Christmas Time brings a lot of Sweets to the people, which could be the reason why the diabetics need insulin as the anti-diabetic drug.
+
+The year 2008 is a little different because there is no data from june on. 
+But there is also a slower decrease after january than in other years.
 
 
 ```{r, echo=TRUE}
 # h02
 # to do
-
+help(h02)
+ggseasonplot(h02)
+ggsubseriesplot(h02)
 ```
 
 Your answer:
+There is a clearly visible Trend that each year more corticosteroid drugs are used.
+The seasonality is also very clear. in February there is a big decrease in corticosteroid drugs use.
+2008 is again a little different, because the decrease after january is slower.
+
 
 
 # Exercise 5
@@ -190,35 +277,88 @@ ggAcf(hsales)
   + ACF only shows seasonality. Cycle length too long to show up here.
 
 ```{r, echo=TRUE, cache=TRUE}
+#usdeaths
 # to do
-
+help(usdeaths)
+autoplot(usdeaths)
+ggseasonplot(usdeaths)
+ggsubseriesplot(usdeaths)
+gglagplot(usdeaths)
+ggAcf(usdeaths)
 ```
 
 Your answer:
++ seasonality evidend in all plots 
+
++ not enough data to see a cyclicity
+
++ no trend visible
+
++ maybe because there are more people outside for the summer months there are happening more accidents which lead to higher death rates
+
+
+
 
 
 ```{r, echo=TRUE, cache=TRUE}
+#bricksq
 # to do
-
+help(bricksq)
+autoplot(bricksq)
+ggseasonplot(bricksq)
+ggsubseriesplot(bricksq)
+gglagplot(bricksq)
+ggAcf(bricksq)
 ```
 
 Your answer:
++ seasonality visible in subseriesplot and Acf plot. First and last Quarter is a little lower.
+
++ trend is visible in autoplot and subseriesplot. The first years the brick production is growing.
+
++cylicity visible in autoplot after the years 1975. There are two big decreases in clay brick production which have the same form.
+
 
 
 ```{r, echo=TRUE, cache=TRUE}
+#sunspotarea
 # to do
+help(sunspotarea)
+autoplot(sunspotarea)
+gglagplot(sunspotarea, lags=20)
+ggAcf(sunspotarea, lag.max = 70)
 
 ```
 
 Your answer:
+season and subseriesplot not possible because there is only one value per year.
 
++ seasonality visible, approximately every 10 years there is a same behaviour. PLot 1 and 3
+
++ trend visible in first plot. sunspotarea increases until 1950 and decreases afterwards.
+
++ no cyclicity visible.
+
++ SunspotArea has a physically explained seasonality which is visible in these plots
 
 ```{r, echo=TRUE, cache=TRUE}
+#gasoline
 # to do
-
+help(gasoline)
+autoplot(gasoline)
+ggseasonplot(gasoline)
+gglagplot(gasoline)
+ggAcf(gasoline)
 ```
 
 Your answer:
++ seasonality visible in acf plot. half a year the gasoline supply goes down and the other half up again.
+
++trend visible in first plot, gasoline supply goes up, shortly down and up again.
+
++cyclicity is not visible 
+
++ probably because the count of cars increased in the years from 1990 to 2010 very much, the supply for gasoline increased aswell. Since 2010 there a probably also many electric cars on the street which doesnt need gasoline anymore.
 
 
 # Exercise 6
@@ -229,21 +369,26 @@ The `pigs` data shows the monthly total number of pigs slaughtered in Victoria, 
 # White noise
 set.seed(1711)
 y <- ts(rnorm(50))
-autoplot(y) + ggtitle("White noise")
 ```
 
 ```{r}
-ggAcf(y)
+mypigs <- window(pigs, start=1990)
+autoplot(y) + ggtitle("White noise")
+autoplot(mypigs) + ggtitle("Pigs slaughtered")
 ```
 
 
 ```{r, echo=TRUE, cache=TRUE}
 # todo
-
+ggAcf(y)
+ggAcf(mypigs)
 ```
 
 Your answer:
++ In the autoplot you can see a little trend, the ammount of the pigs slaughtered over the years increase a little bit.
 
++ in the Acf plot one can see that the first three values are over the line that indicates if a series is a whitenoise series.
+Therefore the mypigs series is no whitenoise.
 
 # Exercise 7
 
@@ -251,8 +396,14 @@ Your answer:
 
 ```{r}
 # todo
+ddj <- diff(dj)
+autoplot(ddj)
+ggAcf(ddj)
 
 ```
 
 Your answer:
++ In the autoplot i looks pretty much like white noise, because there are many seemingly unrelated spikes.
+
++ if you take a look at the acf you can see that this assumption is not without a reason. The most of the legs are under the indicating line for white noise. Only the 6th leg shows, that this is not only white noise.
 
