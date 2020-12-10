@@ -33,7 +33,20 @@ For the following series, find an appropriate Box-Cox (?BoxCox) transformation i
 
 ```{r}
 # todo
- 
+autoplot(usnetelec)
+autoplot(usgdp)
+autoplot(mcopper)
+autoplot(enplanements)
+```
+
+
+```{r}
+help("BoxCox") 
+lambdaCopper = BoxCox.lambda(mcopper)
+autoplot(BoxCox(mcopper, lambdaCopper))
+
+lambdaEnplanements = BoxCox.lambda(enplanements)
+autoplot(BoxCox(enplanements, lambdaEnplanements))
 ```
 
 
@@ -43,10 +56,10 @@ Why is a Box-Cox transformation unhelpful for the `cangas` data?
 
 ```{r}
 # todo
- 
-```
-Your answer:
+ autoplot(cangas)
 
+```
+Your answer: Eine BoxCox transformation ist hauptsächlich dann hilfreich, wenn die Varianz über die Zeit steigt. Der Datensatz Cangas hat aber, wie hier deutlich zu sehen ist eine bauchige Form, wodurch die Varianz lediglich in der Mitte hoch ist, am Anfang und Ende aber klein.
 
 
 # Exercise 3
@@ -61,11 +74,19 @@ autoplot(myts)
 myts %>% BoxCox(lambda = 0) %>% autoplot()
 ```
 
-From visual inspection, a log transformation would be appropriate here. It also makes sense, as retail expenditure is likely to increase proportionally to population, and therefore the seasonal fluctuations are likely to be proportional to the level of the series. It has the added advantage of being easier to explain than some other transformations. Finally, it is relatively close to the automatically selected value of `BoxCox.lambda(myts)` $= `r round(BoxCox.lambda(myts),3)`$.
 
+From visual inspection, a log transformation would be appropriate here. It also makes sense, as retail expenditure is likely to increase proportionally to population, and therefore the seasonal fluctuations are likely to be proportional to the level of the series. It has the added advantage of being easier to explain than some other transformations. Finally, it is relatively close to the automatically selected value of `BoxCox.lambda(myts)` $= `r round(BoxCox.lambda(myts),3)`$.
+```{r}
+retaildata <- readxl::read_excel("data/retail.xlsx", skip=1)
+myts <- ts(retaildata[,"A3349335T"], frequency=12, start=c(1982,4))
+autoplot(myts)
+lambdaSelf = BoxCox.lambda(myts)
+print(lambdaSelf)
+myts %>% BoxCox(lambda = 0) %>% autoplot()
+```
 If you have selected a different series from the retail data set, you might choose a different transformation.
 
-Your answer:
+Your answer: In meinem Beispiel ist ebenfalls eine logarithmische Transformation sinnvoll. Man sieht gut, wie die Varianz bei der transformierten Abbildung kleiner ist. Zudem gibt der automatisch ausgewählte lambda-wert für meine Funktion ebenfalls mit 0.19385 einen Wert nahe bei 0 zurück.
 
 
 # Exercise 4
@@ -74,7 +95,19 @@ Calculate the residuals (?residuals) from a seasonal naive forecast applied to t
 
 ```{r}
 # todo
- 
+help(ausbeer)
+autoplot(ausbeer)
+
+beer <- as_tsibble(beer)
+
+beer_fit = beer %>% model(SNAIVE(ausbeer))
+
+beer_forecast <- beer_fit %>% forecast(h=30)
+
+autoplot(beer_forecast)
+
+res <- beer_forecast %>% residuals()
+
 ```
 
 Test if the residuals are white noise and normally distributed.
