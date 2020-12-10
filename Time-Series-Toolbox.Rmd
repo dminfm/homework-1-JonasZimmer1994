@@ -95,30 +95,25 @@ Calculate the residuals (?residuals) from a seasonal naive forecast applied to t
 
 ```{r}
 # todo
-help(ausbeer)
-autoplot(ausbeer)
+(?residuals)
+beer_fc = snaive(ausbeer, h = 40)
+res = residuals(beer_fc)
 
-beer <- as_tsibble(beer)
-
-beer_fit = beer %>% model(SNAIVE(ausbeer))
-
-beer_forecast <- beer_fit %>% forecast(h=30)
-
-autoplot(beer_forecast)
-
-res <- beer_forecast %>% residuals()
+autoplot(ausbeer) + autolayer(beer_fc)
 
 ```
+
+
 
 Test if the residuals are white noise and normally distributed.
 
 ```{r}
-#checkresiduals(fc)
+checkresiduals(beer_fc)
 ```
 
 What do you conclude?
 
-Your answer:
+Your answer: Die Residuals sind laut des Correlograms nicht nur white noise. Das ist nicht so gut, da das für ein nicht so gutes Vorhersage-Modell steht. 
 
 
 # Exercise 5
@@ -127,23 +122,23 @@ Are the following statements true or false? Explain your answer.
 
 > a. Good forecast methods should have normally distributed residuals.
 
-Your answer:
+Your answer: wahr, da es das Berechnen von Vorhersage-Intervallen erleichtert.
 
 > b. A model with small residuals will give good forecasts.
 
-Your answer:
+Your answer wahr. Residuals sind die Abweichungen der Vorhersagen zu den tatsächlichen Werten. Das bedeutet, je kleiner die Residuals sind, desto besser ist auch die Vorhersagemethode.
 
 > c. The best measure of forecast accuracy is MAPE.
 
-Your answer:
+Your answer: falsch, das beste Vorhersage Model findet man am besten anhand des geringsten RMSE Wert.
 
 > d. If your model doesn't forecast well, you should make it more complicated.
 
-Your answer:
+Your answer: falsch, man sollte eher versuchen, den Fehler zu finden, wieso es nicht gut vorhersagt. Eventuell kann man die Daten in der Vorverarbeitung so vorbereiten, dass das Model bessere Vorhersagen trifft. 
 
 > e. Always choose the model with the best forecast accuracy as measured on the test set.
 
-Your answer:
+Your answer: wahr, falls die Test-Daten die gleichen Eigenschaften haben wie die origninal-Daten. Dann kann man davon ausgehen, dass das Model auch gut auf den original-Daten performt.
 
 # Exercise 6
 
@@ -153,7 +148,7 @@ Split the data into two parts using
 
 ```{r}
 retaildata <- readxl::read_excel("data/retail.xlsx", skip=1)
-myts <- ts(retaildata[,"A3349873A"], frequency=12, start=c(1982,4))
+myts <- ts(retaildata[,"A3349335T"], frequency=12, start=c(1982,4))
 myts.train <- window(myts, end=c(2010,12))
 myts.test <- window(myts, start=2011)
 ```
@@ -170,7 +165,9 @@ Calculate forecasts using `snaive` applied to `myts.train`.
 
 ```{r}
 # todo
- 
+forecast = snaive(myts.train)
+
+forecast_test = snaive(myts.test)
 ```
 
 Compare the accuracy of your forecasts against the actual values stored in `myts.test`.
@@ -178,7 +175,10 @@ Compare the accuracy of your forecasts against the actual values stored in `myts
 
 ```{r}
 # todo
+(?accuracy)
+accuracy(forecast)
  
+accuracy(forecast_test)
 ```
 
 The number to look at here is the test set RMSE of 71.443. That provides a benchmark for comparison when we try other models.
@@ -187,13 +187,14 @@ Check the residuals. Do the residuals appear to be uncorrelated and normally dis
 
 ```{r}
 # todo
- 
+ checkresiduals(forecast)
 ```
 
-Your answer:
+Your answer: Nein, die Residuals sehen nicht unkorreliert aus. An dem Correlogram erkennt man, dass die Residuals stark nach oben ausschlagen, also eine positive Korrelation vorweisen. Die Residuals sehen allerdings nahezu Normalverteilt aus.
 
 
 How sensitive are the accuracy measures to the training/test split?
+lediglich an dem MPE und MAPE measure, sieht man größere Differenzen zwischen den trainings und den test Daten.
 
 
 # Exercise 7
