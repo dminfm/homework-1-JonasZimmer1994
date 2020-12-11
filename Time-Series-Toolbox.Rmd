@@ -204,9 +204,9 @@ lediglich an dem MPE und MAPE measure, sieht man größere Differenzen zwischen 
 Use `window()` to create three training sets for `visnights[,"QLDMetro"],` omitting the last 1, 2 and 3 years; call these train1, train2, and train3, respectively.
 
 ```{r}
-train1 <- window(visnights[, "QLDMetro"], end = c(2015, 3))
+train3 <- window(visnights[, "QLDMetro"], end = c(2015, 3))
 train2 <- window(visnights[, "QLDMetro"], end = c(2015, 2))
-train3 <- window(visnights[, "QLDMetro"], end = c(2015, 1))
+train1 <- window(visnights[, "QLDMetro"], end = c(2015, 1))
 ```
 
 Compute one year of forecasts for each training set using the `snaive()` method. Call these `fc1`, `fc2` and `fc3`, respectively.
@@ -224,9 +224,9 @@ First we will copy the actual data into a variable. Then we can do an accuracy c
 ```{r}
 qld <- visnights[, "QLDMetro"]
 # todo
-accuracy(fc1)
-accuracy(fc2)
-accuracy(fc3)
+accuracy(fc1, qld)
+accuracy(fc2, qld)
+accuracy(fc3, qld)
 ```
 
 This should give similar results to this consolidated results table.
