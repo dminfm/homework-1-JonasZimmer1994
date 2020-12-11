@@ -415,19 +415,18 @@ salesDrift.f <- rwf(sales.train, drift=TRUE, h=h)
 ```{r}
 accuracy(salesMean.f, sales.test)
 accuracy(salesNaive.f, sales.test)
-accuracy(salesDrift.f, sales.test)
 accuracy(salesSnaive.f, sales.test)
+accuracy(salesDrift.f, sales.test)
+
 ```
 
 In terms of accuracy measures on the test set, the seasonal naive method does better.
-In meinem Fall ist die Accuracy für die Mean Methode am besten.
 
 Check the residuals of your preferred method. Do they resemble white noise?
 
 ```{r eval = FALSE}
 # remove eval=FALSE
 checkresiduals(salesSnaive.f)
-checkresiduals(salesMean.f)
 ```
-Die Residuen sehen hier in diesem Fall nicht nach white noise aus. Es gibt eine hohe positive Korrelation zu beginn und gegen Ende eine leichte negative Korrelation.
+Die Residuen sehen hier in diesem Fall nicht nach white noise aus. Am Anfang gibt es eine starke positive Korrelation und gegen Ende eine leichte negative Korrelation
 
