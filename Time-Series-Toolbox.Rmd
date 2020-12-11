@@ -413,10 +413,10 @@ salesSnaive.f <- snaive(sales.train, h=h)
 salesDrift.f <- rwf(sales.train, drift=TRUE, h=h)
 ```
 ```{r}
-accuracy(salesMean.f)
-accuracy(salesNaive.f)
-accuracy(salesDrift.f)
-accuracy(salesSnaive.f)
+accuracy(salesMean.f, sales.test)
+accuracy(salesNaive.f, sales.test)
+accuracy(salesDrift.f, sales.test)
+accuracy(salesSnaive.f, sales.test)
 ```
 
 In terms of accuracy measures on the test set, the seasonal naive method does better.
