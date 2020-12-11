@@ -213,7 +213,9 @@ Compute one year of forecasts for each training set using the `snaive()` method.
 
 ```{r}
 # todo
- 
+fc1 = snaive(train1)
+fc2 = snaive(train2)
+fc3 = snaive(train3)
 ```
 
 Use `accuracy()` to compare the MAPE over the three test sets. Comment on these.
@@ -222,7 +224,9 @@ First we will copy the actual data into a variable. Then we can do an accuracy c
 ```{r}
 qld <- visnights[, "QLDMetro"]
 # todo
- 
+accuracy(fc1)
+accuracy(fc2)
+accuracy(fc3)
 ```
 
 This should give similar results to this consolidated results table.
@@ -245,7 +249,7 @@ Produce a time plot of the series.
 
 ```{r}
 # todo
- 
+help(downjones)
 ```
 
 Produce forecasts using the drift method and plot them.
@@ -255,7 +259,14 @@ Let's assume we want to forecast the next 5, 10 and 15 values.
 ```{r}
 dowfc1 <- rwf(dowjones, drift=TRUE, h=5)
 # todo
- 
+dowfc1 <- rwf(dowjones, drift=TRUE, h=5)
+dowfc2 <- rwf(dowjones, drift=TRUE, h=10)
+dowfc3 <- rwf(dowjones, drift=TRUE, h=15)
+```
+```{r}
+autoplot(dowfc1) 
+autoplot(dowfc2)
+autoplot(dowfc3)
 ```
 
 Then we can plot these values.
@@ -292,10 +303,20 @@ The time series isn't seasonal, so the seasonal naive method is not viable. Howe
 
 ```{r}
 # todo
- 
+fcmean <- meanf(dowjones)
+fcnaive <- naive(dowjones)
+```
+```{r}
+autoplot(fcnaive)
+autoplot(fcmean)
+```
+```{r}
+accuracy(fcmean)
+accuracy(fcnaive)
 ```
 
 The three values will be very different here. The Mean will use the data set, so is unlikely to follow the current trendline.
+Aus diesem Grund ist hier die Naive Methode die beste.
 
 # Exercise 9
 
@@ -305,24 +326,29 @@ Produce some plots of the data in order to become familiar with it.
 
 ```{r}
 # todo
- 
+autoplot(ibmclose)
+ggAcf(ibmclose)
+gglagplot(ibmclose)
 ```
 
 Split the data into a training set of 300 observations and a test set of 69 observations.
 
 ```{r}
 # todo
- 
+ibm.train <- window(ibmclose, end=300)
+ibm.test <- window(ibmclose, start=301)
 ```
 
 Try using various benchmark methods to forecast the training set and compare the results on the test set. Which method did best?
+Drift Methode.
 
 ```{r eval = FALSE}
 # remove eval=FALSE
 h <- length(ibm.test)
 m.f <- meanf(ibm.train, h=h)
 # todo
- 
+rw.f <- naive(ibm.train, h=h)
+rwd.f <- rwf(ibm.train, drift=TRUE, h=h)
 
 
 autoplot(ibmclose) +
@@ -334,15 +360,18 @@ autoplot(ibmclose) +
 
 # accuracy(m.f,ibm.test)
 # todo
- 
+accuracy(m.f, ibm.test)
+accuracy(rw.f, ibm.test)
+accuracy(rwd.f, ibm.test)
 ```
 
 
 Check the residuals of your preferred method. Do they resemble white noise?
+Bis auf drei Ausreißer, ähnelt es white noise schon ein bisschen.
 
 ```{r}
 # todo
- 
+ checkresiduals(rwd.f)
 ```
 
 
@@ -354,30 +383,51 @@ Produce some plots of the data in order to become familiar with it.
 
 ```{r}
 # todo
- 
+print(hsales)
+autoplot(hsales)
+ggAcf(hsales)
+ggsubseriesplot(hsales)
+ggseasonplot(hsales)
+gglagplot(hsales)
 ```
 
 Split the `hsales` data set into a training set and a test set, where the test set is the last two years of data.
 
 ```{r}
 # todo
- 
+sales.train <- window(hsales, end=1993)
+sales.test <- window(hsales, start=1994)
+```
+```{r}
+autoplot(sales.test)
 ```
 
 Try using various benchmark methods to forecast the training set and compare the results on the test set. Which method did best?
 
 ```{r}
 # todo
- 
+h <- length(sales.test)
+salesMean.f <- meanf(sales.train, h=h)
+salesNaive.f <- naive(sales.train, h=h)
+salesSnaive.f <- snaive(sales.train, h=h)
+salesDrift.f <- rwf(sales.train, drift=TRUE, h=h)
+```
+```{r}
+accuracy(salesMean.f)
+accuracy(salesNaive.f)
+accuracy(salesDrift.f)
+accuracy(salesSnaive.f)
 ```
 
 In terms of accuracy measures on the test set, the seasonal naive method does better.
+In meinem Fall ist die Accuracy für die Mean Methode am besten.
 
 Check the residuals of your preferred method. Do they resemble white noise?
 
 ```{r eval = FALSE}
 # remove eval=FALSE
-checkresiduals(sn.f)
+checkresiduals(salesSnaive.f)
+checkresiduals(salesMean.f)
 ```
-
+Die Residuen sehen hier in diesem Fall nicht nach white noise aus. Es gibt eine hohe positive Korrelation zu beginn und gegen Ende eine leichte negative Korrelation.
 
